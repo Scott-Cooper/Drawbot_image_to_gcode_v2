@@ -384,6 +384,7 @@ void keyPressed() {
   if (key == 'g') { 
     create_gcode_files(display_line_count);
     create_gcode_test_file ();
+    create_svg_files(display_line_count);
     d1.render_to_pdf(display_line_count);
     //save_jpg();
   }
