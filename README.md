@@ -12,6 +12,7 @@ If your clipboard contains a URL to a web site, the code will crash and burn in 
 ## Key Bindings:
 | Key | Description |
 | ------------- |:-------------|
+| R | Reset. Re-run the drawing process with another image |
 | p | Load next "Path Finding Module" (PFM) |
 | r | Rotate drawing |
 | [ | Zoom in |

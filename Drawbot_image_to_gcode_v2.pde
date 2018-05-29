@@ -104,14 +104,23 @@ void setup() {
   colorMode(RGB);
   frameRate(999);
   //randomSeed(millis());
+  // functions to avoid duplicate code
+  setDefaults();
+
+  // If the clipboard contains a URL, try to download the picture instead of using local storage.
+  checkClipboard();
+}
+
+void setDefaults() {
   randomSeed(3);
   d1 = new botDrawing();
   dx = new Limit(); 
   dy = new Limit(); 
   copic = new Copix();
   loadInClass(pfms[current_pfm]);
-
-  // If the clipboard contains a URL, try to download the picture instead of using local storage.
+  
+}
+void checkClipboard() {
   String url = GClip.paste();
   if (match(url.toLowerCase(), "^https?:...*(jpg|png)") != null) {
     println("Image URL found on clipboard: "+ url);
@@ -121,6 +130,44 @@ void setup() {
     println("image URL not found on clipboard");
     selectInput("Select an image to process:", "fileSelected");
   }
+}
+
+// Still a bug to solve - reseting works well but we need to press a key right after the file selection dialog disapeared to launch the drawing 
+void reset() {
+  current_pfm = 0; 
+  state = 1;
+  pen_selected = 0;
+  current_copic_set = 0;
+  display_line_count = 0;
+  display_mode = "drawing";
+  img_orginal = null;               // The original image
+  img_reference = null;             // After pre_processing, croped, scaled, boarder, etc.  This is what we will try to draw. 
+  img = null;                       // Used during drawing for current brightness levels.  Gets damaged during drawing.
+  gcode_offset_x = 0;
+  gcode_offset_y = 0;
+  gcode_scale = 0;
+  screen_scale = 0;
+  screen_scale_org = 0;
+  screen_rotate = 0;
+  old_x = 0;
+  old_y = 0;
+  mx = 0;
+  my = 0;
+  morgx = 0;
+  morgy = 0;
+  pen_color = 0;
+  is_pen_down = false;
+  is_grid_on = false;
+  path_selected = "";
+  file_selected = "";
+  basefile_selected = "";
+  gcode_comments = "";
+  startTime = 0;
+  ctrl_down = false;
+  pen_distribution = new float[pen_count];    
+  
+  setDefaults();
+  checkClipboard();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -330,6 +377,7 @@ void keyPressed() {
   if (key == '{' && current_copic_set >= 1)                   { current_copic_set--; }
   
   if (key == 's') { if (state == 3) { state++; } }
+  if (key == 'R') { reset(); } 
   if (keyCode == 65 && ctrl_down)  {
     println("Holly freak, Ctrl-A was pressed!");
   }
